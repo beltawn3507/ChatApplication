@@ -19,11 +19,11 @@ function App() {
   const {theme} =usethemeStore();
 
   useEffect(()=>{
-    console.log("checking auth oh yeahhhfhf");
+   // console.log("checking auth oh yeahhhfhf");
     checkauth();
   },[checkauth]);
 
-  console.log("authuser status",authuser);
+  //console.log("authuser status",authuser);
   
   //console.log(isCheckingAuth);
 
@@ -43,7 +43,7 @@ function App() {
       <Route path="/signup" element={!authuser ? <SignUp /> : <Navigate to="/" />} />
       <Route path="/login" element={
   (() => {
-    console.log("Login route accessed, auth state:", authuser);
+   // console.log("Login route accessed, auth state:", authuser);
     return !authuser ? <Login /> : <Navigate to="/" />;
   })()
 } />
