@@ -15,13 +15,14 @@ import {usethemeStore} from "./store/themeStore.js"
 
 function App() {
   
-  const {authuser,checkauth,isCheckingAuth} = useauthStore();
+  const {authuser,checkauth,isCheckingAuth,onlineUsers} = useauthStore();
   const {theme} =usethemeStore();
 
   useEffect(()=>{
-   // console.log("checking auth oh yeahhhfhf");
     checkauth();
   },[checkauth]);
+
+  console.log("online users right now",onlineUsers);
 
   //console.log("authuser status",authuser);
   
