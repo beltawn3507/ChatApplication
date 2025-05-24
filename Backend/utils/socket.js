@@ -1,8 +1,8 @@
 import { Server } from "socket.io";
 import http from "http";
 import express from "express";
-import cloudinary from "./cloudinary.js"
-import Message from "../model/message.model.js"
+import cloudinary from "./cloudinary.js";
+import Message from "../model/message.model.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -29,13 +29,13 @@ io.on("connection", (socket) => {
     io.emit("getonlineusers", Object.keys(onlineusersmap));
   });
 
-  socket.on("sendMessage", async(data) => {
+  socket.on("sendMessage", async (data) => {
     const { text, image, senderId, receiverId } = data;
     let imageurl = "";
-    if(image){
-          const uploadresponse = await cloudinary.uploader.upload(image);
-          imageurl=uploadresponse.secure_url;
-        }
+    if (image) {
+      const uploadresponse = await cloudinary.uploader.upload(image);
+      imageurl = uploadresponse.secure_url;
+    }
 
     try {
       //emit this temp message via web socket
@@ -68,12 +68,40 @@ io.on("connection", (socket) => {
       });
 
       await savedMessage.save();
-
-
-
     } catch (error) {
       console.error("Failed to save message:", error);
       // optionally emit "messageFailed" to sender
+    }
+  });
+
+  socket.on("webrtc", (data) => {
+    
+    console.log(data.message);
+
+    const { message, selecteduser, authuser } = data;
+    const receiverSocketId = getsocketid(selecteduser._id);
+    const senderSocketId = getsocketid(authuser._id);
+
+    switch (message.type) {
+      case "offer":
+      case "candidate":
+        // send to receiver (callee)
+        io.to(receiverSocketId).emit("webrtc", data);
+        break;
+
+      case "answer":
+      case "ready":
+        // send to sender (caller)
+        io.to(senderSocketId).emit("webrtc", data);
+        break;
+
+      case "bye":
+        // send to both ends or just the other side
+        io.to(receiverSocketId).emit("webrtc", data);
+        break;
+
+      default:
+        console.log("Unknown WebRTC message type:", message.type);
     }
   });
 });

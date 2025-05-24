@@ -76,9 +76,12 @@ export const usechatstore = create((set,get) => ({
           messages:[...messages,receivedmessage]
         })
      })
-   }
+   },
   //unsuscribe message
-   
+   stoplisteningformessage:()=>{
+    const socket=useauthStore.getState().socket;
+    socket.off("newMessage");
+   }
 
 
 }));

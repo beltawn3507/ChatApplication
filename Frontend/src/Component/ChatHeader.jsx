@@ -1,6 +1,8 @@
 import { X } from "lucide-react";
 import { useauthStore } from "../store/authstore.js";
 import { usechatstore } from "../store/chatstore.js";
+import { MdVideoCameraFront } from "react-icons/md";
+import { Link } from "react-router";
 
 function ChatHeader() {
   const { onlineUsers } = useauthStore();
@@ -26,6 +28,14 @@ function ChatHeader() {
               </p>
             </div>
           </div>
+          
+          <button>
+            <Link to='/videochat'>
+            <MdVideoCameraFront />
+            </Link>
+            
+
+          </button>
 
           {/* Close button */}
           <button onClick={() => setselecteduser(null)}>

@@ -13,8 +13,8 @@ function ChatContainer() {
     ismessageloading,
     getMessages,
     selecteduser,
-    listenformessage
-    // unsubscribeFromMessages,
+    listenformessage,
+    stoplisteningformessage
   } = usechatstore();
    
   const {authuser} =useauthStore();
@@ -24,6 +24,8 @@ function ChatContainer() {
     getMessages(selecteduser._id);
 
     listenformessage();
+
+    return ()=>stoplisteningformessage();
   }, [selecteduser._id, getMessages,listenformessage]);
 
   useEffect(() => {
